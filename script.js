@@ -13,9 +13,27 @@ function sendToTelegram(lat, lon) {
       chat_id: chatId,
       text: message
     })
-  }).then(() => {
-    alert("✅ Đã gửi vị trí của bạn về Telegram!");
+  }).then(res => {
+    if (res.ok) {
+      alert("✅ Đã gửi vị trí của bạn về Telegram!");
+    } else {
+      alert("❌ Gửi thất bại. Có thể token hoặc chat_id sai.");
+    }
   }).catch(error => {
     alert("❌ Lỗi khi gửi vị trí: " + error.message);
   });
+}
+
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+      sendToTelegram(lat, lon);
+    }, function(error) {
+      alert("❌ Không lấy được vị trí: " + error.message);
+    });
+  } else {
+    alert("❌ Trình duyệt không hỗ trợ định vị!");
+  }
 }
